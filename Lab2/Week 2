@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<string.h>
+
+int indeex=0,pos=0,top=-1,length;
+char infix[30],postfix[30],stack[30],sym,temp;
+void infixToPostfix();
+void push(char ele);
+char pop();
+int pred(char ele);
+int main(){
+    printf("enter infix expression:");
+    scanf("%s",&infix);
+    infixToPostfix();
+    printf("the postfix expression is: %s",postfix);
+    return 0;
+}
+
+void infixToPostfix(){
+    length=strlen(infix);
+    push('#');
+    while(indeex<length){
+        sym=infix[indeex];
+        switch(sym){
+            case '(':push(sym);break;
+            case ')':temp=pop();
+                     while(temp!='('){
+                        postfix[pos]=temp;
+                        pos++;
+                        temp=pop();
+                     }break;
+            case '^':
+            case '*':
+            case '/':
+            case '+':
+            case '-':while(pred(stack[top])>=pred(sym)){
+                temp=pop();
+                postfix[pos++]=temp;
+            }
+            push(sym);
+            break;
+            default:postfix[pos++]=sym;
+        }
+        indeex++;
+    }
+    while(top>0){
+        temp=pop();
+        postfix[pos++]=temp;
+    }
+}
+
+void push(char ele){
+    top=top+1;
+    stack[top]=ele;
+}
+
+char pop(){
+    char ele;
+    ele=stack[top];
+    top=top-1;
+    return ele;
+}
+
+int pred(char sym){
+    int p;
+    switch(sym){
+        case '^':p=3;break;
+        case '*':
+        case '/':p=2;break;
+        case '+':
+        case '-':p=1;break;
+        case '(':p=0;break;
+        case '#':p=-1;break;
+    }
+    return p;
+}
