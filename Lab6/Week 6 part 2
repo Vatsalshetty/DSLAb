@@ -1,0 +1,173 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* insert_at_beginning(struct Node* head, int data) {
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    if (!temp) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    temp->data = data;
+    temp->next = head;
+    return temp;
+}
+
+struct Node* insert_at_end(struct Node* head, int data) {
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    if (!temp) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    temp->data = data;
+    temp->next = NULL;
+
+    if (head == NULL) {
+        return temp;
+    } else {
+        struct Node* tail = head;
+        while (tail->next != NULL) {
+            tail = tail->next;
+        }
+        tail->next = temp;
+    }
+    return head;
+}
+
+int count(struct Node* head) {
+    int c = 0;
+    struct Node* temp = head;
+    while (temp != NULL) {
+        temp = temp->next;
+        c++;
+    }
+    return c;
+}
+
+struct Node* insert_at_pos(struct Node* head, int data, int pos) {
+    if (pos < 0 || pos > count(head)) {
+        printf("INVALID POSITION\n");
+        return head;
+    }
+
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    if (!temp) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    temp->data = data;
+
+    if (pos == 0) {
+        temp->next = head;
+        return temp;
+    }
+
+    struct Node* curr = head;
+    for (int i = 0; i < pos - 1; i++) {
+        curr = curr->next;
+    }
+    
+    temp->next = curr->next;
+    curr->next = temp;
+
+    return head;
+}
+
+void display(struct Node* head) {
+    struct Node* temp = head;
+
+    if (temp == NULL) {
+        printf("THE NODE IS EMPTY\n");
+        return;
+    }
+    
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    
+    printf("\n");
+}
+
+void delete_at_beg(struct Node** head_ref) {
+    if (*head_ref == NULL) {
+        printf("THE GIVEN LIST IS EMPTY\n");
+        return;
+    }
+
+    struct Node* curr = *head_ref;
+    *head_ref = (*head_ref)->next; 
+    free(curr); 
+}
+
+void delete_end(struct Node** head_ref) {
+    if (*head_ref == NULL) {
+        printf("THE LIST IS EMPTY\n");
+        return; 
+    }
+
+    struct Node* curr = *head_ref;
+
+    if (curr->next == NULL) { 
+        free(curr);
+        *head_ref = NULL; 
+        return;
+    }
+
+    struct Node* currp = NULL; 
+    while (curr->next != NULL) {
+        currp = curr; 
+        curr = curr->next; 
+    }
+
+    free(curr); 
+    currp->next = NULL; 
+}
+
+void delete_at_inter(struct Node** head_ref, int pos) {
+    if (*head_ref == NULL) {
+        printf("THE LIST IS EMPTY\n");
+        return; 
+    }
+
+    if (pos < 0 || pos >= count(*head_ref)) {
+        printf("THE ENTERED POSITION VALUE DOES NOT EXIST\n");
+        return; 
+    }
+
+    struct Node* curr = *head_ref;
+
+    if (pos == 0) { 
+        *head_ref = curr->next; 
+        free(curr); 
+        return;
+    }
+
+   struct Node* currp = NULL; 
+   for(int i=0; i<pos; i++) { 
+       currp=curr; 
+       curr=curr->next; 
+   } 
+   currp->next=curr->next; 
+   free(curr); 
+}
+
+int main() {
+   struct Node* head = NULL;
+
+   head = insert_at_end(head, 10);
+   head = insert_at_end(head, 20);
+   display(head);
+
+   delete_at_beg(&head);
+   display(head);
+
+   delete_end(&head);
+   display(head);
+
+   return 0;
+}
