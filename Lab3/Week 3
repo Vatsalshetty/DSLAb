@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define N 5
+
+int queue[N];
+int front=-1,rear=-1,x;
+
+void insert()
+{
+    if(rear==N-1)
+    {
+        printf("Overflow");
+    }
+    else if(front==-1 && rear==-1)
+    {
+        front = 0;
+        rear = 0;
+        printf("Enter the element:");
+        scanf("%d",&x);
+        queue[rear] = x;
+    }
+    else
+    {
+        rear++;
+        printf("Enter the element:");
+        scanf("%d",&x);
+        queue[rear] = x;
+    }
+
+}
+
+void delete()
+{
+    if(front == -1 && rear == -1)
+    {
+        printf("Queue is empty...");
+    }
+    else if(front == rear)
+    {
+        front = -1;
+        rear = -1;
+    }
+    else
+    {
+       front++;
+    }
+
+}
+
+void display()
+{
+    if(front == -1 && rear == -1)
+    {
+        printf("Queue is empty");
+    }
+    else
+    {
+        for(int i=front;i<rear+1;i++)
+        {
+            printf("%d\n",queue[i]);
+        }
+    }
+}
+
+void main()
+{
+  int ch;
+  while(1)
+  {
+      printf("The choices are:");
+      printf("1.insert\n 2.delete\n 3.display\n 4.exit\n");
+      printf("Enter the choice:");
+      scanf("%d",&ch);
+      switch(ch)
+      {
+          case 1:insert();break;
+          case 2:delete();break;
+          case 3:display();break;
+          case 4:exit(0);break;
+      }
+  }
+}
