@@ -1,0 +1,146 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertbeg(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        newNode->next = *head;
+    } else {
+        struct Node* temp = *head;
+        while (temp->next != *head) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->next = *head;
+        *head = newNode;
+    }
+}
+
+void insertpos(struct Node** head, int data, int position) {
+    struct Node* newNode = createNode(data);
+    if (position == 0) {
+        insertbeg(head, data);
+        return;
+    }
+    struct Node* temp = *head;
+    for (int i = 0; i < position - 1; i++) {
+        temp = temp->next;
+        if (temp == *head) break; // Prevent going beyond the list
+    }
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+void insertend(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        newNode->next = *head;
+    } else {
+        struct Node* temp = *head;
+        while (temp->next != *head) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->next = *head;
+    }
+}
+
+void deletebeg(struct Node** head) {
+    if (*head == NULL) return;
+    struct Node* temp = *head;
+    if (temp->next == *head) {
+        free(temp);
+        *head = NULL;
+    } else {
+        struct Node* last = *head;
+        while (last->next != *head) {
+            last = last->next;
+        }
+        last->next = temp->next;
+        *head = temp->next;
+        free(temp);
+    }
+}
+
+void deletepos(struct Node** head, int position) {
+    if (*head == NULL) return;
+    struct Node* temp = *head;
+    if (position == 0) {
+        deletebeg(head);
+        return;
+    }
+    struct Node* prev = NULL;
+    for (int i = 0; i < position; i++) {
+        prev = temp;
+        temp = temp->next;
+        if (temp == *head) return; // Prevent going beyond the list
+    }
+    prev->next = temp->next;
+    free(temp);
+}
+
+void deleteend(struct Node** head) {
+    if (*head == NULL) return;
+    struct Node* temp = *head;
+    if (temp->next == *head) {
+        free(temp);
+        *head = NULL;
+    } else {
+        struct Node* prev = NULL;
+        while (temp->next != *head) {
+            prev = temp;
+            temp = temp->next;
+        }
+        prev->next = *head;
+        free(temp);
+    }
+}
+
+void trav(struct Node* head) {
+    if (head == NULL) return;
+    struct Node* temp = head;
+    do {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("HEAD\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+
+    insertend(&head, 10);
+    insertend(&head, 20);
+    insertbeg(&head, 5);
+    insertpos(&head, 15, 2);
+
+    printf("Circular Linked List: ");
+    trav(head);
+
+    deletebeg(&head);
+    printf("After deleting from beginning: ");
+    trav(head);
+
+    deleteend(&head);
+    printf("After deleting from end: ");
+    trav(head);
+
+    deletepos(&head, 1);
+    printf("After deleting from position 1: ");
+    trav(head);
+
+    return 0;
+}
