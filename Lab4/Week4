@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define N 5
+int front=-1,rear=-1,item,i;
+int queue[N];
+
+void insert()
+{
+    if(front == -1 && rear == -1)
+    {
+        front = 0;
+        rear = 0;
+        printf("Enter the element:");
+        scanf("%d",&item);
+        queue[rear] = item;
+    }
+    else if((rear+1)%N == front)
+    {
+        printf("Queue is full\n");
+    }
+    else
+    {
+        rear = (rear+1)%N;
+        printf("Enter the element:");
+        scanf("%d",&item);
+        queue[rear] = item;
+    }
+}
+
+void delete()
+{
+    if(front == -1  && rear == -1)
+    {
+        printf("Queue is empty\n");
+    }
+    else if(front == rear)
+    {
+        front = -1;
+        rear = -1;
+    }
+    else
+    {
+        front = (front+1)%N;
+    }
+}
+
+void display()
+{
+    if(front == -1 && rear == -1)
+    {
+        printf("Queue is empty\n");
+    }
+    while(i!=rear)
+    {
+        printf("%d\n",queue[i]);
+        i=(i+1)%N;
+    }
+    printf("%d\n",queue[i]);
+}
+
+
+void main()
+{
+    int ch;
+    while(1)
+    {
+        printf("1 Insert\n 2 Delete\n 3 Display\n 4 Exit\n");
+        printf("Enter the choice:\n");
+        scanf("%d",&ch);
+
+        switch(ch)
+        {
+            case 1:insert();break;
+            case 2:delete();break;
+            case 3:display();break;
+            case 4:exit(0);break;
+        }
+    }
+}
+
+--------------------------------
+
+OUTPUT
+
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
+1
+Enter the element:1
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
+1
+Enter the element:2
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
+1
+Enter the element:3
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
+3
+1
+2
+3
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
+2
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
+2
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
+2
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
+2
+Queue is empty
+1 Insert
+ 2 Delete
+ 3 Display
+ 4 Exit
+Enter the choice:
